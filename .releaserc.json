@@ -1,5 +1,15 @@
 {
-  "branches": ["master"],
+  "branches": [
+    "+([0-9])?(.{+([0-9]),x}).x",
+    "master",
+    "next",
+    "next-major",
+    {
+      "name": "freetown",
+      "prerelease": true,
+      "channel": "freetown"
+    }
+  ],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
