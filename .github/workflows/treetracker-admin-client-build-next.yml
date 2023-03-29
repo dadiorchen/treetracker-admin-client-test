@@ -52,30 +52,30 @@ jobs:
         if: ${{ !env.ACT }}
         run: npm test
         working-directory: ${{ env.project-directory }}
-          #  release:
-          #    name: Release semantic version
-          #      #needs: client
-          #    runs-on: ubuntu-latest
-          #    if: |
-          #      !contains(github.event.head_commit.message, 'skip-ci') &&
-          #      github.event_name == 'push' &&
-          #      github.repository == ${{ github.env.repository }}
-          #    steps:
-          #      - name: Check out repository code
-          #        uses: actions/checkout@v2
-          #        with:
-          #          persist-credentials: false
-          #      - name: Set up Node.js
-          #        uses: actions/setup-node@v1
-          #        with:
-          #          node-version: '18.x'
-          #      # install dependencies and run semantic-release
-          #      - run: npm i -g semantic-release @semantic-release/{git,exec,changelog}
-          #      - run: semantic-release
-          #        if: ${{ !env.ACT }}
-          #        env:
-          #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          #          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  release:
+    name: Release semantic version
+    needs: client
+    runs-on: ubuntu-latest
+    if: |
+      !contains(github.event.head_commit.message, 'skip-ci') &&
+      github.event_name == 'push' &&
+      github.repository == ${{ github.env.repository }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+      # install dependencies and run semantic-release
+      - run: npm i -g semantic-release @semantic-release/{git,exec,changelog}
+      - run: semantic-release
+        if: ${{ !env.ACT }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
   deploy:
     name: Deploy to dev CDN
     runs-on: ubuntu-latest
