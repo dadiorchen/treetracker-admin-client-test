@@ -103,7 +103,7 @@ jobs:
         uses: unfor19/install-aws-cli-action@v1
       - name: Copy front end resources to s3 bucket
         run: |
-          aws s3 sync public s3://${{ secrets.DEV_CDN_S3_BUCKET_FREETOWN }} --delete
+          aws s3 sync build-dev s3://${{ secrets.DEV_CDN_S3_BUCKET_FREETOWN }} --delete
       - name: Invalidate cloudfront caches
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DEV_CDN_DISTRIBUTION_ID_FREETOWN }} --paths "/*"
