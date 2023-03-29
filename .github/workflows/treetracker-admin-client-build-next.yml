@@ -10,6 +10,7 @@ on:
 
 env:
   project-directory: ./
+  repository: 'dadiorchen/treetracker-admin-client-test'
 
 jobs:
   client:
@@ -32,12 +33,12 @@ jobs:
         run: npm run lint
         working-directory: ${{ env.project-directory }}
       - name: build client dev project
-        if: github.event_name == 'push' && github.repository == 'Greenstand/treetracker-admin-client'
+        if: github.event_name == 'push' && github.repository == ${{ env.repository }}
         #if: ${{ !env.ACT }}
         run: npm run build:dev
         working-directory: ${{ env.project-directory }}
       - uses: actions/upload-artifact@v2
-        if: github.event_name == 'push' && github.repository == 'Greenstand/treetracker-admin-client'
+        if: github.event_name == 'push' && github.repository == ${{ env.repository }}
         #if: ${{ !env.ACT }}
         with:
           name: client-bundle
@@ -58,7 +59,7 @@ jobs:
     if: |
       !contains(github.event.head_commit.message, 'skip-ci') &&
       github.event_name == 'push' &&
-      github.repository == 'Greenstand/treetracker-admin-client'
+      github.repository == ${{ env.repository }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
@@ -82,7 +83,7 @@ jobs:
     if: |
       !contains(github.event.head_commit.message, 'skip-ci') &&
       github.event_name == 'push' &&
-      github.repository == 'Greenstand/treetracker-admin-client'
+      github.repository == ${{ env.repository }}
     steps:
       - uses: actions/checkout@v2
       - name: Download bundled client resources
