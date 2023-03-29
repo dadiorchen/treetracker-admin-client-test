@@ -79,8 +79,7 @@ jobs:
   deploy:
     name: Deploy to dev CDN
     runs-on: ubuntu-latest
-      #needs: release
-    needs: client
+    needs: release
     if: |
       !contains(github.event.head_commit.message, 'skip-ci') &&
       github.event_name == 'push' &&
