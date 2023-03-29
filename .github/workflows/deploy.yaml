@@ -18,6 +18,7 @@ on:
 
 env:
   project-directory: ./
+  repository: 'dadiorchen/treetracker-admin-client-test'
 
 
 jobs:
@@ -50,15 +51,17 @@ jobs:
   #        working-directory: ${{ env.project-directory }}
 
   deploy:
-    name: Deploy to STAGING CDN
+    name: Deploy to CDN
     runs-on: ubuntu-latest
     needs: frontend
     if: |
-      github.repository == "Greenstand/${{ github.event.repository.name }}"
+      github.repository == ${{ github.env.repository }}
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.tag }}
+      - name: Resolve channel, s3 bucket and distribution id secret name
+        run: echo ::set-output name=CHANEL::$(echo `node -e ' process.env.GITHUB_REF_NAME === "master" ? console.log("master") :console.log(require("./.releaserc.json").branches.reduce((a,c) => a || c.name === process.env.GITHUB_REF_NAME  && c.channel, false))'`)
+        id: resolver
+      - name: Print resolved vars
+        run: echo ${{ steps.resolver.outputs.CHANNEL }}
       - name: Download bundled frontend resources
         uses: actions/download-artifact@v2
         with:
