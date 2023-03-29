@@ -70,4 +70,4 @@ jobs:
           aws s3 sync build s3://${{ secrets.PROD_CDN_S3_BUCKET_FREETOWN }} --delete
       - name: Invalidate cloudfront caches
         run: |
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.RPOD_CDN_DISTRIBUTION_ID_FREETOWN }} --paths "/*"
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.PROD_CDN_DISTRIBUTION_ID_FREETOWN }} --paths "/*"
