@@ -28,6 +28,11 @@ jobs:
     if: |
       !contains(github.event.head_commit.message, 'skip-ci')
     steps:
+      - name: Resolve channel, s3 bucket and distribution id secret name
+        run: echo ::set-output name=CHANEL::$(echo `node -e ' process.env.GITHUB_REF_NAME === "master" ? console.log("master") :console.log(require("./.releaserc.json").branches.reduce((a,c) => a || c.name === process.env.GITHUB_REF_NAME  && c.channel, false))'`)
+        id: resolver
+      - name: Print resolved vars
+        run: echo ${{ steps.resolver.outputs.CHANNEL }}
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.version }}
